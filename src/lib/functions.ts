@@ -44,3 +44,37 @@ export const anotherPickle = inngest.createFunction(
     return { event, body: responseTwo };
   }
 );
+
+export const timeoutFunction = inngest.createFunction(
+  {
+    id: "timeout-function",
+  },
+  { event: "infinite-loop" },
+  async ({ step }) => {
+    await step.sleep("wait-1s", "1s");
+
+    const url =
+      "https://f19330f69112.ngrok-free.app/?duration=850000&interval=5000";
+
+    const response = await fetch(url);
+    if (response.body) {
+      const reader = response.body.getReader();
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          // Process chunk
+          console.log(new TextDecoder().decode(value));
+        }
+      } finally {
+        reader.releaseLock();
+      }
+    }
+
+    await step.sleep("wait-5s", "5s");
+
+    return "done";
+  }
+);
