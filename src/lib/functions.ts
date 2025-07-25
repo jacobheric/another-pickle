@@ -59,14 +59,10 @@ export const timeoutFunction = inngest.createFunction(
   },
   { event: "infinite-loop" },
   async ({ step }) => {
-    // Test: Wait for 6 minutes to see if the function itself can live this long.
-    await step.sleep("wait-for-6m", "6m");
+    await step.sleep("wait-1s", "1s");
 
-    console.log("Slept for 6 minutes, now fetching...");
-
-    // Use a short-lived stream for this test.
     const url =
-      "https://b7da049814ce.ngrok-free.app/?duration=10000&interval=1000";
+      "https://b7da049814ce.ngrok-free.app/?duration=850000&interval=5000";
 
     const response = await fetch(url);
     if (response.body) {
@@ -80,11 +76,12 @@ export const timeoutFunction = inngest.createFunction(
           // Process chunk
           console.log(new TextDecoder().decode(value));
         }
-        console.log("Fetch test complete.");
       } finally {
         reader.releaseLock();
       }
     }
+
+    await step.sleep("wait-5s", "5s");
 
     return "done";
   }
