@@ -2,7 +2,15 @@ import { openai } from "inngest";
 import { inngest } from "./inngest";
 
 export const anotherPickle = inngest.createFunction(
-  { id: "another-pickle" },
+  {
+    id: "another-pickle",
+    throttle: {
+      limit: 1,
+      period: "5s",
+      burst: 2,
+      key: "event.data.user_id",
+    },
+  },
   { event: "pickle/another" },
   async ({ event, step }) => {
     console.log("getting first pickle");
@@ -54,7 +62,7 @@ export const timeoutFunction = inngest.createFunction(
     await step.sleep("wait-1s", "1s");
 
     const url =
-      "https://f19330f69112.ngrok-free.app/?duration=850000&interval=5000";
+      "https://04e6fe6a3709.ngrok-free.app/?duration=850000&interval=5000";
 
     const response = await fetch(url);
     if (response.body) {
