@@ -62,7 +62,7 @@ export const timeoutFunction = inngest.createFunction(
     await step.sleep("wait-1s", "1s");
 
     const url =
-      "https://04e6fe6a3709.ngrok-free.app/?duration=850000&interval=5000";
+      "https://b7da049814ce.ngrok-free.app/?duration=850000&interval=5000";
 
     const response = await fetch(url);
     if (response.body) {
